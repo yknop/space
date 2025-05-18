@@ -118,6 +118,7 @@ def insert_image_to_mongo(db, image_name, json_file_path, date_keys, satellite_n
         logger.error(error_log, exc_info=True)
         raise Exception(error_log) from error
 
+
 def send_to_check_disruptions(
     db, image_path, mongo_image_id, satellite_name, json_file_path, image_shape
 ):

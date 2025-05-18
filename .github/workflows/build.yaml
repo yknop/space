@@ -34,7 +34,7 @@ jobs:
         with:
           login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
           username: ${{ secrets.AZ_USERNAME }}
-          password: ${{ secrets.AZ_PASSWORD }}
+          password: ${{ secrets.   }}
 
       - name: 📃 Docker metadata
         id: meta
