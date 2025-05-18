@@ -1,0 +1,25 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.4.0
+    hooks:
+      - id: check-added-large-files
+      # - id: check-executables-have-shebangs
+      - id: check-json
+      # - id: check-toml
+      # - id: check-xml
+      - id: check-yaml
+      - id: end-of-file-fixer
+      - id: forbid-submodules
+      - id: mixed-line-ending
+      - id: pretty-format-json
+      - id: trailing-whitespace
+        args:
+          - --markdown-linebreak-ext=md
+
+  - repo: local
+    hooks:
+      - id: yaml-file-extension
+        name: Check that YAML files have *.yaml extension
+        entry: YAML filenames must have .yaml extension
+        language: fail
+        files: .yml$

@@ -1,0 +1,25 @@
+# name: 🧪 Tests
+
+# on:
+#   push:
+
+# jobs:
+#   build:
+#     runs-on: ubuntu-latest
+
+#     container:
+#       image: osgeo/gdal:ubuntu-small-3.6.3
+
+#     steps:
+#     - name: 📂 Checkout
+#       uses: actions/checkout@v4
+
+#     - name: ⏬ Install dependencies
+#       run: |
+#         apt-get update && apt-get install ffmpeg libsm6 libxext6 python3-pip -y
+#         pip install --upgrade pip
+#         pip install -r requirements.test.txt
+
+#     - name: ✅ Run tests
+#       run: |
+#         pytest test
