@@ -32,7 +32,7 @@ jobs:
       - name: 🗝️ Login to Container Registry
         uses: azure/docker-login@v1
         with:
-          login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
+          login-server: ${{ secrets.AZ_LOGIN_SERVER }}
           username: ${{ secrets.AZ_USERNAME }}
           password: ${{ secrets.AZ_PASSWORD }}
 
@@ -40,7 +40,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ${{ secrets.REGISTRY_LOGIN_SERVER_NEW }}/space
+          images: ${{ secrets.AZ_LOGIN_SERVER }}/space
           flavor: |
             latest=false
           tags: |
