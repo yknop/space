@@ -13,7 +13,8 @@ from utils.polygon.polygon import create_polygon
 from utils.logger.write import logger
 from utils.consts.consts_by_satellite_name import get_consts_blur
 from utils.files.manage_folders import create_folder, remove_folder, remove_file
-from utils.images.manage_images import create_sub_image, is_background_sub_image
+from utils.images.manage_sub_image import create_sub_image
+from utils.images.image_background import is_background_sub_image
 
 
 def blur_disruption(
