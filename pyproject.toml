@@ -14,7 +14,6 @@ dependencies = [
     "scikit-image==0.25.1",
     "shapely==2.0.6",
     "pytz==2024.2",
-    "azure-storage-blob==12.20.0",
 ]
 
 [tool.setuptools.packages.find]
