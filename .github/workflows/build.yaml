@@ -40,7 +40,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ${{ secrets.AZ_LOGIN_SERVER }}/newspace-qa2
+          images: ${{ secrets.AZ_LOGIN_SERVER }}/space
           flavor: |
             latest=false
           tags: |
