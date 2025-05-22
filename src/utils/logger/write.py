@@ -2,6 +2,7 @@ import logging
 from datetime import datetime
 from dotenv import load_dotenv
 from pytz import timezone
+from typing import Any
 
 load_dotenv()
 
