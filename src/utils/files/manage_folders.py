@@ -2,11 +2,17 @@ import shutil
 import os
 from typing import Callable, Optional, Tuple
 
+from utils.logger.write import logger
+
 
 def create_folder(folder_name: str) -> None:
-    if os.path.isdir(f"./{folder_name}"):
-        remove_folder(folder_name)
-    os.mkdir(f"./{folder_name}")
+    try:
+        logger.info(f"Start create folder")
+        if os.path.isdir(f"./{folder_name}"):
+            remove_folder(folder_name)
+        os.mkdir(f"./{folder_name}")
+    except Exception as error:
+        logger.info(f"create folder failed {error}")
 
 
 def remove_folder(folder_name: str) -> None:

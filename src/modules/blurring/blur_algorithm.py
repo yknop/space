@@ -26,6 +26,7 @@ def blur_disruption(
     **kwargs: Any,
 ) -> None:
     try:
+        logger.info(f"Blur check Start!!!!!!!!!!")
         blurred_squares: List[Tuple[Tuple[int, int], Tuple[int, int]]] = []
         image_folder, file_name = os.path.split(image_path)
         image_name, extension = os.path.splitext(file_name)
