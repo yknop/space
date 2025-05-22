@@ -10,4 +10,4 @@ RUN python -m pip install --upgrade pip && \
     pip install .
 
 
-CMD ["bash", "-c", "echo 'Started container'; ls -l src; python src/main.py"]
+CMD ["bash", "-c", "echo 'Started container!!!!!!!'; ls -l src; python src/main.py"]
