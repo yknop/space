@@ -21,6 +21,7 @@ def execute_check_image(blob_name: str) -> str:
         db = connect()
         blob_client = connect_azure(blob_name)
         path = extract_blob(blob_client, blob_name)
+        logger.info(f"{path} -----------------------------------------------")
         check_image(db, f"{path}")
         disconnect()
         shutil.rmtree(os.path.dirname(path))

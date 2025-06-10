@@ -73,6 +73,7 @@ def get_image_data(root: str) -> Tuple[str, str, str, str, Dict[str, Any]]:
 
 
 def check_image(db: Database, root: str) -> None:
+    logger.info(f"{root} _____________________________________________.")
     try:
         (
             json_file_path,
