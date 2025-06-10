@@ -73,7 +73,6 @@ def get_image_data(root: str) -> Tuple[str, str, str, str, Dict[str, Any]]:
 
 
 def check_image(db: Database, root: str) -> None:
-    logger.info(f"{root} _____________________________________________.")
     try:
         (
             json_file_path,
@@ -93,6 +92,7 @@ def check_image(db: Database, root: str) -> None:
         error_log = "Failed in check image ---- "
         logger.error(error_log, exc_info=True)
         return
+    logger.info(f"before send_to_check_disruptions ??????????????????????????????????????????????? __________.")
     send_to_check_disruptions(
         db,
         image_path,
@@ -112,7 +112,9 @@ def send_to_check_disruptions(
     json_file_path: str,
     image_shape: Any,
 ) -> None:
+    logger.info(f"send_to_check_disruptions ______!!!!!!!!!!!!!!!!!!!______.")
     background_image = create_background_image(image_path)
+    logger.info(f"create_background_image ______!!!!!!!!!!!!!!!!!!!______.")
     for disruption in [
         blur_disruption,
         smear_disruption,
@@ -130,6 +132,6 @@ def send_to_check_disruptions(
                 background_image=background_image,
             )
         except Exception as error:
-            error_log = "Failed in for disruption ---- "
+            error_log = "_____   Failed in for disruption ---- "
             logger.error(error_log, exc_info=True)
             continue
