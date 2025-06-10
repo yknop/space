@@ -1,15 +1,17 @@
-import os
 from datetime import datetime
-from pymongo.database import Database
+
 from bson.objectid import ObjectId
+from pymongo.database import Database
 
-from utils.logger.write import logger
+from utils.env.get_env import get_env
+from utils.logger.write import get_logger
+
+env = get_env()
+logger = get_logger()
 
 
-def insert_image(
-    db: Database, photo_date: datetime, image_name: str, satellite: str
-) -> ObjectId:
-    collection_name = os.getenv("IMAGES_COLLECTION_NAME")
+def insert_image(db: Database, photo_date: datetime, image_name: str, satellite: str) -> ObjectId:
+    collection_name = env.collection_name
     return insert_mongodb(
         db,
         collection_name,

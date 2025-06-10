@@ -1,6 +1,7 @@
+from typing import List
+
 import cv2
 import numpy as np
-from typing import List
 
 from modules.blurring.is_blur import decide_if_blur
 

@@ -1,9 +1,7 @@
-from typing import Union, Tuple
+from typing import Tuple, Union
 
 
-def get_slope(
-    point1: Tuple[float, float], point2: Tuple[float, float]
-) -> Union[float, str]:
+def get_slope(point1: Tuple[float, float], point2: Tuple[float, float]) -> Union[float, str]:
     if (point1[0] - point2[0]) == 0:
         return "vertical"
     return (point1[1] - point2[1]) / (point1[0] - point2[0])
@@ -15,13 +13,11 @@ def are_parallel_lines(
     slope_difference_threshold_value: float,
 ) -> bool:
     if isinstance(slope1, str) or isinstance(slope2, str):
-        return check_are_parallel_vertical_lines(
-            slope1, slope2, slope_difference_threshold_value
-        )
+        return are_parallel_vertical_lines(slope1, slope2, slope_difference_threshold_value)
     return abs(slope1 - slope2) < slope_difference_threshold_value
 
 
-def check_are_parallel_vertical_lines(
+def are_parallel_vertical_lines(
     slope1: Union[float, str],
     slope2: Union[float, str],
     slope_difference_threshold_value: float,

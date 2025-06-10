@@ -1,43 +1,51 @@
 import os
-from dotenv import load_dotenv
+import shutil
+import traceback
+from concurrent.futures import ThreadPoolExecutor as PoolExecutor
+
 from azure.storage.blob import BlobServiceClient
 
 from db_connections.connection import connect, disconnect
-from utils.logger.write import logger
-from utils.azure.extract_blob import extract_and_process_blob
+from utils.azure.connect_azure import connect_azure
+from utils.azure.extract_blob import extract_blob
+from utils.env.get_env import get_env
+from utils.images.manage_images import check_image
+from utils.logger.write import get_logger
 
-load_dotenv()
+env = get_env()
+logger = get_logger()
 
 
-def main():
+def execute_check_image(blob_name: str) -> str:
     try:
-        logger.info("Start!!!")
         db = connect()
-        AZURE_CONNECTION_STRING = os.getenv("AZURE_CONNECTION_STRING")
-        CONTAINER_NAME = os.getenv("AZURE_CONTAINER_NAME")
-        logger.info(f"AZURE_CONNECTION_STRING {AZURE_CONNECTION_STRING}" )
-        logger.info(f"AZURE_CONTAINER_NAME {CONTAINER_NAME}" )
-        blob_service_client = BlobServiceClient.from_connection_string(
-            AZURE_CONNECTION_STRING
-        )
-        container_client = blob_service_client.get_container_client(CONTAINER_NAME)
+        blob_client = connect_azure(blob_name)
+        path = extract_blob(blob_client, blob_name)
+        check_image(db, f"{path}")
+        disconnect()
+        shutil.rmtree(os.path.dirname(path))
 
-        for blob in container_client.list_blobs():
-            blob_client = container_client.get_blob_client(blob.name)
-            try:
-                extract_and_process_blob(blob_client, blob.name, db)
+        logger.info(f"{blob_name} processed successfully.")
+    except Exception:
+        logger.info(f"{blob_name} failed:\n{traceback.format_exc()}")
 
-            except Exception as error:
-                error_log = f"Failed to process {blob.name}"
-                logger.error(error_log, exc_info=True)
-                raise Exception(error_log) from error
 
-            disconnect()
+def main() -> None:
+    try:
+        logger.info("Starting parallel blob processing...")
+        num_workers = env.num_workers
 
-    except Exception as error:
-        error_log = "Failed to process blob"
-        logger.error(error_log, exc_info=True)
-        raise Exception(error_log) from error
+        blob_service_client = BlobServiceClient.from_connection_string(env.azure_connection_string)
+        container_client = blob_service_client.get_container_client(env.azure_container_name)
+        blob_names = [blob.name for blob in container_client.list_blobs()]
+
+        with PoolExecutor(max_workers=num_workers) as executor:
+            [executor.submit(execute_check_image, blob_name) for blob_name in blob_names]
+
+        logger.info("Finished processing all blobs.")
+    except Exception:
+        logger.error("Fatal error during blob batch processing.", exc_info=True)
+        raise
 
 
 if __name__ == "__main__":

@@ -5,9 +5,11 @@ from db_connections.update_object import add_disruption
 from modules.cutting.dodecagon import is_dodecagon
 from modules.cutting.parallelogram import is_parallelogram
 from modules.cutting.vertices import get_vertices
-from utils.logger.write import logger
 from utils.consts.consts_by_satellite_name import get_consts_cutting_image
 from utils.files.extract_value import get_value_by_keys
+from utils.logger.write import get_logger
+
+logger = get_logger()
 
 
 def cutting_disruption(
@@ -30,21 +32,15 @@ def cutting_disruption(
         logger.error(error_log, exc_info=True)
 
 
-def is_cut(
-    background_image: Any, json_file_path: str, shape: str, consts: Dict[str, Any]
-) -> bool:
+def is_cut(background_image: Any, json_file_path: str, shape: str, consts: Dict[str, Any]) -> bool:
     if is_not_polygon(json_file_path):
         return True
     vertices = get_vertices(background_image, consts["epsilon_coefficient"])
     match shape:
         case "parallelogram":
-            return not is_parallelogram(
-                vertices, consts["slope_difference_threshold_value"]
-            )
+            return not is_parallelogram(vertices, consts["slope_difference_threshold_value"])
         case "dodecagon":
-            return not is_dodecagon(
-                vertices, consts["slope_difference_threshold_value"]
-            )
+            return not is_dodecagon(vertices, consts["slope_difference_threshold_value"])
         case _:
             raise ValueError(f"The shape: {shape} is not supported.")
 
@@ -54,6 +50,4 @@ def is_not_polygon(json_file_path: str) -> bool:
         type_shape = get_value_by_keys(json_file_path, ["geometry", "type"])
         return type_shape != "Polygon"
     except Exception as error:
-        raise Exception(
-            f"When trying to read from metadata.json an error occurred: {error}"
-        )
+        raise Exception(f"When trying to read from metadata.json an error occurred: {error}")

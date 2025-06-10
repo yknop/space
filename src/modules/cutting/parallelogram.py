@@ -1,6 +1,6 @@
 from typing import List, Tuple
 
-from modules.cutting.parallel_lines import get_slope, are_parallel_lines
+from modules.cutting.parallel_lines import are_parallel_lines, get_slope
 
 
 def is_parallelogram(

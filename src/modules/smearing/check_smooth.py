@@ -1,6 +1,7 @@
+from typing import Dict
+
 import cv2
 import numpy as np
-from typing import Dict
 
 
 def is_smooth_region(image: np.ndarray, consts: Dict[str, float]) -> bool:

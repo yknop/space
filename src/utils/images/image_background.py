@@ -1,6 +1,7 @@
-from typing import Tuple, List
-import numpy as np
+from typing import List, Tuple
+
 import cv2
+import numpy as np
 
 
 def is_background_sub_image(
@@ -45,14 +46,10 @@ def fill_background_pixels(image: np.ndarray, background_image: np.ndarray) -> N
     background_pixels: List[Tuple[int, int]] = []
     for i in range(len(image)):
         fill_background_pixel(image, background_image, background_pixels, i, 0)
-        fill_background_pixel(
-            image, background_image, background_pixels, i, len(image[0]) - 1
-        )
+        fill_background_pixel(image, background_image, background_pixels, i, len(image[0]) - 1)
     for j in range(len(image[0])):
         fill_background_pixel(image, background_image, background_pixels, 0, j)
-        fill_background_pixel(
-            image, background_image, background_pixels, len(image) - 1, j
-        )
+        fill_background_pixel(image, background_image, background_pixels, len(image) - 1, j)
 
 
 def fill_background_pixel(
@@ -83,6 +80,4 @@ def change_pixel(
 
 
 def is_correct_position(background_image: np.ndarray, i: int, j: int) -> bool:
-    return (
-        i >= 0 and i < len(background_image) and j >= 0 and j < len(background_image[0])
-    )
+    return i >= 0 and i < len(background_image) and j >= 0 and j < len(background_image[0])

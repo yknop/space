@@ -1,18 +1,12 @@
-import shutil
 import os
+import shutil
 from typing import Callable, Optional, Tuple
-
-from utils.logger.write import logger
 
 
 def create_folder(folder_name: str) -> None:
-    try:
-        logger.info(f"Start create folder")
-        if os.path.isdir(f"./{folder_name}"):
-            remove_folder(folder_name)
-        os.mkdir(f"./{folder_name}")
-    except Exception as error:
-        logger.info(f"create folder failed {error}")
+    if os.path.isdir(f"./{folder_name}"):
+        remove_folder(folder_name)
+    os.mkdir(f"./{folder_name}")
 
 
 def remove_folder(folder_name: str) -> None:
@@ -36,9 +30,7 @@ def polygon_image_path(src_path: str, folder_name: str) -> str:
 
 
 def get_metadata_json_file(folder_path: str) -> str:
-    return get_file_path_by_extension(
-        folder_path, "metadata.json", is_metadata_json_file
-    )
+    return get_file_path_by_extension(folder_path, "metadata.json", is_metadata_json_file)
 
 
 def is_metadata_json_file(file: str) -> bool:
@@ -63,9 +55,7 @@ def get_file_recursive(
     return get_file_path_from_sub_folders(folder_path, func_is_correct_file)
 
 
-def get_file_path(
-    folder_path: str, func_is_correct_file: Callable[[str], bool]
-) -> Optional[str]:
+def get_file_path(folder_path: str, func_is_correct_file: Callable[[str], bool]) -> Optional[str]:
     for file in os.listdir(folder_path):
         file_path = os.path.join(folder_path, file)
         if os.path.isfile(file_path) and func_is_correct_file(file):

@@ -1,20 +1,23 @@
 import os
+from itertools import product
+from typing import Any, List, Tuple
+
 import cv2
 import rasterio
-from itertools import product
-from typing import List, Tuple, Any
 
-from db_connections.update_object import add_disruption
 from db_connections.disruptions_enum import Disruptions
+from db_connections.update_object import add_disruption
 from modules.blurring.laplacian_algorithm import laplacian_data
 from modules.blurring.robert_algorithm import robert_data
 from modules.blurring.sobel_algorithm import sobel_data
-from utils.polygon.polygon import create_polygon
-from utils.logger.write import logger
 from utils.consts.consts_by_satellite_name import get_consts_blur
-from utils.files.manage_folders import create_folder, remove_folder, remove_file
-from utils.images.manage_sub_image import create_sub_image
+from utils.files.manage_folders import create_folder, remove_file, remove_folder
 from utils.images.image_background import is_background_sub_image
+from utils.images.manage_sub_image import create_sub_image
+from utils.logger.write import get_logger
+from utils.polygon.polygon import create_polygon
+
+logger = get_logger()
 
 
 def blur_disruption(
@@ -26,7 +29,6 @@ def blur_disruption(
     **kwargs: Any,
 ) -> None:
     try:
-        logger.info(f"Blur check Start!!!!!!!!!!")
         blurred_squares: List[Tuple[Tuple[int, int], Tuple[int, int]]] = []
         image_folder, file_name = os.path.split(image_path)
         image_name, extension = os.path.splitext(file_name)
@@ -103,9 +105,7 @@ def blur_sub_image_algorithm(
 ) -> Tuple[int, int]:
     width_sub_image = min(x + consts["sub_image_size"], width) - x
     height_sub_image = min(y + consts["sub_image_size"], height) - y
-    if is_background_sub_image(
-        background_image, x, y, width_sub_image, height_sub_image
-    ):
+    if is_background_sub_image(background_image, x, y, width_sub_image, height_sub_image):
         return 0, 0
     sub_image_path = create_sub_image(
         x,

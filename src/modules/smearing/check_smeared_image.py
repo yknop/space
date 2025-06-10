@@ -1,8 +1,10 @@
-import numpy as np
 from typing import Union
-import cv2
 
-from consts.smear import DECAY_FACTOR as decay_factor, COORDINATES_OF_BLOCK, BLOCK_SIZE
+import cv2
+import numpy as np
+
+from consts.smear import BLOCK_SIZE, COORDINATES_OF_BLOCK
+from consts.smear import DECAY_FACTOR as decay_factor
 
 
 def compare_decay(image: np.ndarray) -> None:
@@ -34,9 +36,7 @@ def vertical_decay(spectrogram: np.ndarray) -> np.ndarray:
     return spectrogram * total_decay
 
 
-def block_decay(
-    image: np.ndarray, general_spectrogram: np.ndarray
-) -> Union[int, np.ndarray]:
+def block_decay(image: np.ndarray, general_spectrogram: np.ndarray) -> Union[int, np.ndarray]:
     x, y = COORDINATES_OF_BLOCK
     block = image[y : y + BLOCK_SIZE[1], x : x + BLOCK_SIZE[0]]
     if block.shape[0] == 0:

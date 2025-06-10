@@ -1,19 +1,22 @@
-import cv2
 import os
 from itertools import product
-import rasterio
 from typing import Any, Dict, List, Tuple
 
-from db_connections.update_object import add_disruption
+import cv2
+import rasterio
+
 from db_connections.disruptions_enum import Disruptions
+from db_connections.update_object import add_disruption
 from modules.smearing.check_smeared_image import compare_decay
 from modules.smearing.check_smooth import is_smooth_region
-from utils.polygon.polygon import create_polygon
-from utils.logger.write import logger
 from utils.consts.consts_by_satellite_name import get_consts_smear
-from utils.files.manage_folders import create_folder, remove_folder, remove_file
-from utils.images.manage_sub_image import create_sub_image
+from utils.files.manage_folders import create_folder, remove_file, remove_folder
 from utils.images.image_background import is_background_sub_image
+from utils.images.manage_sub_image import create_sub_image
+from utils.logger.write import get_logger
+from utils.polygon.polygon import create_polygon
+
+logger = get_logger()
 
 
 def smear_disruption(
@@ -122,9 +125,7 @@ def smear_sub_image_algorithm(
     width_sub_image = min(x + consts["size"], width) - x
     height_sub_image = min(y + consts["size"], height) - y
 
-    if is_background_sub_image(
-        background_image, x, y, width_sub_image, height_sub_image
-    ):
+    if is_background_sub_image(background_image, x, y, width_sub_image, height_sub_image):
         return 0, 0
     sub_image_path = create_sub_image(
         x,

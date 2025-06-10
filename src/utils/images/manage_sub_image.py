@@ -1,10 +1,14 @@
 import os
-import numpy as np
-import rasterio
-from rasterio.windows import Window
 from typing import Any, Dict, Tuple
 
-from utils.logger.write import logger
+import numpy as np
+import rasterio
+from affine import Affine
+from rasterio.windows import Window
+
+from utils.logger.write import get_logger
+
+logger = get_logger()
 
 
 def save_sub_image(
@@ -27,9 +31,7 @@ def create_sub_image(
         name, _ = os.path.splitext(file_name)
         img_path = os.path.join(img_dir, file_name)
         sub_image_path = os.path.join(f"{name}", f"{name}_{x}_{y}.tif")
-        sub_image, profile_sub_image = read_sub_image(
-            img_path, x, y, width_size, height_size
-        )
+        sub_image, profile_sub_image = read_sub_image(img_path, x, y, width_size, height_size)
         save_sub_image(sub_image_path, sub_image, profile_sub_image)
         return sub_image_path
     except Exception as error:
@@ -65,7 +67,7 @@ def get_new_profile(
     width_size: int,
     height_size: int,
     window: Window,
-    transform: Any,
+    transform: Affine,
 ) -> Dict[str, Any]:
     profile.update(
         {

@@ -1,5 +1,6 @@
-from shapely.geometry import Polygon, MultiPolygon
-from typing import List, Tuple, Dict, Any, Union
+from typing import Any, Dict, List, Tuple, Union
+
+from shapely.geometry import MultiPolygon, Polygon
 
 
 def create_polygon(

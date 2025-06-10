@@ -1,6 +1,4 @@
-from typing import Dict, Any
-
-from utils.logger.write import logger
+from typing import Any, Dict
 
 from consts.blur import (
     BLACKSKY_BLUR_PERCENTAGE_THRESHOLD_VALUE,
@@ -8,7 +6,12 @@ from consts.blur import (
     BLACKSKY_ROBERT_THRESHOLD_VALUES,
     BLACKSKY_SOBEL_THRESHOLD_VALUES,
 )
+from consts.cutting import (
+    BLACKSKY_EPSILON_COEFFICIENT,
+    SLOPE_DIFFERENCE_THRESHOLD_VALUE,
+)
 from consts.manage_images import BLACKSKY_SUB_IMAGE_SIZE
+from consts.satellites import SATELLITES
 from consts.saturation import (
     BLACKSKY_GRID_SIZE,
     BLACKSKY_SATURATION_DISRUPTION_PERCENT,
@@ -16,17 +19,13 @@ from consts.saturation import (
     BLACKSKY_SATURATION_THRESHOLD_VALUE,
 )
 from consts.smear import (
+    BLACKSKY_BLUR_THRESHOLD_VALUE,
+    BLACKSKY_LAPLACIAN_THRESHOLD_VALUE,
     BLACKSKY_SMEAR_PERCENTAGE_THRESHOLD_VALUE,
     BLACKSKY_SMEAR_THRESHOLD_VALUE,
     BLACKSKY_SOBEL_THRESHOLD_VALUE,
-    BLACKSKY_LAPLACIAN_THRESHOLD_VALUE,
-    BLACKSKY_BLUR_THRESHOLD_VALUE,
 )
-from consts.cutting import (
-    BLACKSKY_EPSILON_COEFFICIENT,
-    SLOPE_DIFFERENCE_THRESHOLD_VALUE,
-)
-from consts.satellites import SATELLITES
+from utils.logger.write import get_logger
 
 
 def get_consts_blur(satellite_name: str) -> Dict[str, Any]:
@@ -87,5 +86,5 @@ def get_satellite_details(company: str) -> Dict[str, Any]:
         return SATELLITES[company]
     except KeyError as error:
         error_log = "No document found for company '{company}'"
-        logger.error(error_log, exc_info=True)
+        get_logger().error(error_log, exc_info=True)
         raise ValueError(error_log) from error

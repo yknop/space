@@ -1,6 +1,6 @@
 from typing import List, Tuple
 
-from modules.cutting.parallel_lines import get_slope, are_parallel_lines
+from modules.cutting.parallel_lines import are_parallel_lines, get_slope
 
 
 def is_dodecagon(
@@ -8,12 +8,10 @@ def is_dodecagon(
 ) -> bool:
     if len(vertices) != 12:
         return False
-    return check_are_all_lines_parallel_in_direction(
-        vertices, slope_difference_threshold_value
-    )
+    return are_all_lines_parallel_in_direction(vertices, slope_difference_threshold_value)
 
 
-def check_are_all_lines_parallel_in_direction(
+def are_all_lines_parallel_in_direction(
     vertices: List[Tuple[float, float]], slope_difference_threshold_value: float
 ) -> bool:
     indexes_direction_1 = [[x, x + 1] for x in range(0, 12, 2)]
@@ -26,18 +24,12 @@ def check_are_all_lines_parallel_in_direction(
     ]
     return are_all_lines_parallel(
         slopes_in_direction_1, slope_difference_threshold_value
-    ) and are_all_lines_parallel(
-        slopes_in_direction_2, slope_difference_threshold_value
-    )
+    ) and are_all_lines_parallel(slopes_in_direction_2, slope_difference_threshold_value)
 
 
-def are_all_lines_parallel(
-    slopes: List[float], slope_difference_threshold_value: float
-) -> bool:
+def are_all_lines_parallel(slopes: List[float], slope_difference_threshold_value: float) -> bool:
     for index in range(len(slopes)):
-        if not is_line_parallel_to_all_lines(
-            slopes, index, slope_difference_threshold_value
-        ):
+        if not is_line_parallel_to_all_lines(slopes, index, slope_difference_threshold_value):
             return False
     return True
 
@@ -46,8 +38,6 @@ def is_line_parallel_to_all_lines(
     slopes: List[float], index: int, slope_difference_threshold_value: float
 ) -> bool:
     for index2 in range(index + 1, len(slopes)):
-        if not are_parallel_lines(
-            slopes[index], slopes[index2], slope_difference_threshold_value
-        ):
+        if not are_parallel_lines(slopes[index], slopes[index2], slope_difference_threshold_value):
             return False
     return True

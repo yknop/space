@@ -1,12 +1,17 @@
-from bson import ObjectId
+from typing import List
 
-from utils.logger.write import logger
-from utils.files.extract_value import get_value_by_keys
+from bson import ObjectId
+from pymongo.database import Database
+
 from db_connections.insert_object import insert_image
+from utils.files.extract_value import get_value_by_keys
+from utils.logger.write import get_logger
+
+logger = get_logger()
 
 
 def insert_image_to_mongo(
-    db, image_name, json_file_path, date_keys, satellite_name
+    db: Database, image_name: str, json_file_path: str, date_keys: List[str], satellite_name: str
 ) -> ObjectId:
     try:
         try:
