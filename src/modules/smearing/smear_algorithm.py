@@ -27,6 +27,7 @@ def smear_disruption(
     *args: Any,
     **kwargs: Any,
 ) -> None:
+    logger.info(f"Start Smear")
     try:
         smeared_squares: List[List[Tuple[int, int]]] = []
         image_folder, file_name = os.path.split(image_path)

@@ -28,6 +28,7 @@ def blur_disruption(
     *args: Any,
     **kwargs: Any,
 ) -> None:
+    logger.info(f"Start Blur")
     try:
         blurred_squares: List[Tuple[Tuple[int, int], Tuple[int, int]]] = []
         image_folder, file_name = os.path.split(image_path)

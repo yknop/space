@@ -89,7 +89,9 @@ def check_image(db: Database, root: str) -> None:
             satellite_details["date_location"],
             satellite_name,
         )
-    except Exception:
+    except Exception as error:
+        error_log = "Failed in check image ---- "
+        logger.error(error_log, exc_info=True)
         return
     send_to_check_disruptions(
         db,
@@ -127,5 +129,7 @@ def send_to_check_disruptions(
                 image_shape,
                 background_image=background_image,
             )
-        except Exception:
+        except Exception as error:
+            error_log = "Failed in for disruption ---- "
+            logger.error(error_log, exc_info=True)
             continue

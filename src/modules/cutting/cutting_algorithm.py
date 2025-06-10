@@ -22,6 +22,7 @@ def cutting_disruption(
     *args: Any,
     **kwargs: Dict[str, Any],
 ) -> None:
+    logger.info(f"Start Cut")
     try:
         consts = get_consts_cutting_image(satellite_name)
         if is_cut(kwargs["background_image"], json_file_path, shape, consts):
