@@ -3,11 +3,12 @@ import os
 from datetime import date, datetime
 from logging.handlers import RotatingFileHandler
 
-from dotenv import load_dotenv
 from pytz import timezone
 
-load_dotenv()
+from utils.env.get_env import get_env
 
+
+env = get_env()
 logger = None
 
 
@@ -23,7 +24,7 @@ def create_logger(logger_name: str) -> logging.Logger:
     logger = logging.getLogger(logger_name)
     logger.setLevel(logging.DEBUG)
 
-    logs_dir = os.getenv("LOGS_PATH")
+    logs_dir = env.logs_path
     os.makedirs(logs_dir, exist_ok=True)
     handler = RotatingFileHandler(
         os.path.join(logs_dir, f"{date.today()}.log"),
