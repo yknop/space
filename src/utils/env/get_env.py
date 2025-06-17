@@ -19,7 +19,7 @@ def get_env() -> EnvVars:
         azure_connection_string=os.getenv("AZURE_CONNECTION_STRING"),
         azure_container_name=os.getenv("AZURE_CONTAINER_NAME"),
         collection_name=os.getenv("IMAGES_COLLECTION_NAME"),
-        days_to_delete_logs=int(os.getenv("DAYS_TO_DELETE_LOG")),
+        days_to_delete_logs=int(os.getenv("DAYS_TO_DELETE_LOG", "7")),
         logs_path=os.getenv("LOGS_PATH"),
         mongo_database=os.getenv("MONGODB_DATABASE"),
         mongo_uri=os.getenv("MONGO_URI"),

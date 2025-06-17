@@ -21,7 +21,6 @@ def execute_check_image(blob_name: str) -> str:
         db = connect()
         blob_client = connect_azure(blob_name)
         path = extract_blob(blob_client, blob_name)
-        logger.info(f"{path} -----------------------------------------------")
         check_image(db, f"{path}")
         disconnect()
         shutil.rmtree(os.path.dirname(path))
@@ -34,8 +33,8 @@ def execute_check_image(blob_name: str) -> str:
 def main() -> None:
     try:
         logger.info("Starting parallel blob processing...")
-        num_workers = env.num_workers
 
+        num_workers = env.num_workers
         blob_service_client = BlobServiceClient.from_connection_string(env.azure_connection_string)
         container_client = blob_service_client.get_container_client(env.azure_container_name)
         blob_names = [blob.name for blob in container_client.list_blobs()]

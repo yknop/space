@@ -2,6 +2,8 @@ import os
 import re
 from typing import Any, Dict, Tuple
 
+import cv2
+import numpy as np
 from bson.objectid import ObjectId
 from pymongo.database import Database
 
@@ -52,11 +54,11 @@ def convert_ntf_image(folder_path: str) -> Tuple[str, str]:
         raise Exception(error_log) from error
 
 
-def get_image_data(root: str) -> Tuple[str, str, str, str, Dict[str, Any]]:
+def get_image_data(path_image: str) -> Tuple[str, str, str, str, Dict[str, Any]]:
     try:
-        json_file_path = get_metadata_json_file(root)
-        satellite_name = get_company_by_folder_name(re.search(r"[^/\\]+$", root).group(0))
-        tiff_file, image_path = get_image_file(root, satellite_name)
+        json_file_path = get_metadata_json_file(path_image)
+        satellite_name = get_company_by_folder_name(re.search(r"[^/\\]+$", path_image).group(0))
+        tiff_file, image_path = get_image_file(path_image, satellite_name)
         satellite_details = get_satellite_details(satellite_name)
         tiff_file_name = os.path.splitext(tiff_file)[0]
         return (
@@ -72,7 +74,7 @@ def get_image_data(root: str) -> Tuple[str, str, str, str, Dict[str, Any]]:
         raise Exception(error_log) from error
 
 
-def check_image(db: Database, root: str) -> None:
+def check_image(db: Database, path_image: str) -> None:
     try:
         (
             json_file_path,
@@ -80,7 +82,7 @@ def check_image(db: Database, root: str) -> None:
             image_path,
             satellite_name,
             satellite_details,
-        ) = get_image_data(root)
+        ) = get_image_data(path_image)
         mongo_image_id: ObjectId = insert_image_to_mongo(
             db,
             tiff_file_name,
@@ -88,11 +90,8 @@ def check_image(db: Database, root: str) -> None:
             satellite_details["date_location"],
             satellite_name,
         )
-    except Exception as error:
-        error_log = "Failed in check image ---- "
-        logger.error(error_log, exc_info=True)
+    except Exception:
         return
-    logger.info(f"before send_to_check_disruptions ??????????????????????????????????????????????? __________.")
     send_to_check_disruptions(
         db,
         image_path,
@@ -112,9 +111,8 @@ def send_to_check_disruptions(
     json_file_path: str,
     image_shape: Any,
 ) -> None:
-    logger.info(f"send_to_check_disruptions ______!!!!!!!!!!!!!!!!!!!______.")
-    background_image = create_background_image(image_path)
-    logger.info(f"create_background_image ______!!!!!!!!!!!!!!!!!!!______.")
+    image = load_image(image_path)
+    background_mask = create_background_image(image) == 1
     for disruption in [
         blur_disruption,
         smear_disruption,
@@ -129,9 +127,20 @@ def send_to_check_disruptions(
                 satellite_name,
                 json_file_path,
                 image_shape,
-                background_image=background_image,
+                background_mask=background_mask,
             )
-        except Exception as error:
-            error_log = "_____   Failed in for disruption ---- "
-            logger.error(error_log, exc_info=True)
+        except Exception:
             continue
+
+
+def load_image(image_path: str) -> np.ndarray:
+    try:
+        image = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
+        if image is not None:
+            return image
+        logger.info(f"Image shape: {image.shape}, dtype: {image.dtype}")
+    except Exception as error:
+        error_log = "Failed to load image"
+        logger.error(error_log, exc_info=True)
+        raise Exception(error_log) from error
+    return image

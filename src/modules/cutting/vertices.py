@@ -7,8 +7,8 @@ import cv2
 import numpy as np
 
 
-def get_vertices(background_image: np.ndarray, epsilon_coefficient: float) -> List[np.ndarray]:
-    thresholded = np.where(background_image == 1, 0, 255).astype(np.uint8)
+def get_vertices(background_mask: np.ndarray, epsilon_coefficient: float) -> List[np.ndarray]:
+    thresholded = np.where(background_mask, 0, 255).astype(np.uint8)
     contours, _ = cv2.findContours(thresholded, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
     if contours:
         return get_vertices_from_contours(contours, epsilon_coefficient)

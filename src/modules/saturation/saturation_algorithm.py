@@ -22,7 +22,6 @@ def saturation_disruption(
     *args: Any,
     **kwargs: Any,
 ) -> None:
-    logger.info(f"Start saturation")
     try:
         image = cv2.imread(image_path)
         saturated_image, saturated_squares = saturation_check(image, satellite_name)
