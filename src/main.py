@@ -32,8 +32,7 @@ def execute_check_image(blob_name: str) -> str:
 
 def main() -> None:
     try:
-        logger.info("Starting parallel blob processing...")
-
+        logger.info("🚀 Starting parallel blob processing........................................................")
         num_workers = env.num_workers
         blob_service_client = BlobServiceClient.from_connection_string(env.azure_connection_string)
         container_client = blob_service_client.get_container_client(env.azure_container_name)

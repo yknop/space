@@ -83,6 +83,7 @@ def check_image(db: Database, path_image: str) -> None:
             satellite_name,
             satellite_details,
         ) = get_image_data(path_image)
+        logger.info("After   --get_image_data--   function")
         mongo_image_id: ObjectId = insert_image_to_mongo(
             db,
             tiff_file_name,
@@ -90,6 +91,7 @@ def check_image(db: Database, path_image: str) -> None:
             satellite_details["date_location"],
             satellite_name,
         )
+        logger.info("After   --insert_image_to_mongo--   function")
     except Exception:
         return
     send_to_check_disruptions(
@@ -134,6 +136,7 @@ def send_to_check_disruptions(
 
 
 def load_image(image_path: str) -> np.ndarray:
+    logger.info(f"Start load_image ----------")
     try:
         image = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
         if image is not None:
