@@ -33,15 +33,15 @@ def execute_check_image(blob_name: str) -> str:
 def main() -> None:
     try:
         logger.info("🚀 Starting parallel blob processing........................................................")
-        num_workers = env.num_workers
-        blob_service_client = BlobServiceClient.from_connection_string(env.azure_connection_string)
-        container_client = blob_service_client.get_container_client(env.azure_container_name)
-        blob_names = [blob.name for blob in container_client.list_blobs()]
+        # num_workers = env.num_workers
+        # blob_service_client = BlobServiceClient.from_connection_string(env.azure_connection_string)
+        # container_client = blob_service_client.get_container_client(env.azure_container_name)
+        # blob_names = [blob.name for blob in container_client.list_blobs()]
 
-        with PoolExecutor(max_workers=num_workers) as executor:
-            [executor.submit(execute_check_image, blob_name) for blob_name in blob_names]
+        # with PoolExecutor(max_workers=num_workers) as executor:
+        #     [executor.submit(execute_check_image, blob_name) for blob_name in blob_names]
 
-        logger.info("Finished processing all blobs.")
+        # logger.info("Finished processing all blobs.")
     except Exception:
         logger.error("Fatal error during blob batch processing.", exc_info=True)
         raise
